@@ -15,4 +15,9 @@ public class GreetingController {
     public ResponseEntity sayWelcome() {
         return new ResponseEntity("Welcome to Greeting App", HttpStatus.OK);
     }
+
+    @GetMapping({"/greeting/message"})
+    public String getWelcomeMessage() {
+        return  greetingService.greetingMessage();
+    }
 }
