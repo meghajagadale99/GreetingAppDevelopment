@@ -1,34 +1,63 @@
 package com.bridgelabz.greetingappdevelopment.controller;
 
+
+import com.bridgelabz.greetingappdevelopment.dto.GreetingDTO;
+import com.bridgelabz.greetingappdevelopment.model.Greeting;
 import com.bridgelabz.greetingappdevelopment.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@RestController
 public class GreetingController {
     @Autowired
     private GreetingService greetingService;
 
-    @GetMapping(value = "/greeting", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity sayWelcome() {
-        return new ResponseEntity("Welcome to Greeting App", HttpStatus.OK);
+    @GetMapping("/")
+    public String greeting() {
+        return "Hello! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting/message")
-    public String getWelcomeMessage() {
+    public String greetingMessage() {
         return greetingService.greetingMessage();
     }
 
-    @GetMapping("/greeting/message/{name}")
+    @GetMapping("/name")
     public String greeting(@PathVariable String name) {
-        return "Hello " + name + "! Hello World!";
+        return "Hello " + name + "! Welcome to Greeting App!";
     }
-    @GetMapping("/greeting/messages/{name}")
-    public String greeting(@RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname) {
-        return "Hello " + fname + " " + lname +"! Hello World!";
+
+    @GetMapping("/greeting")
+    public String greeting(@RequestParam(value = "fname") String fname,
+                           @RequestParam(value = "lname") String lname) {
+        return "Hello " + fname + " " + lname + "! Welcome to Greeting App!";
     }
+
+    @PostMapping(value = "/greeting")
+    public Greeting addGreeting(@RequestBody GreetingDTO greetingDTO) {
+        return greetingService.addGreeting(greetingDTO);
+    }
+
+    @GetMapping(value = "/get-greeting-by-id")
+    public Greeting getGreetingById(@RequestBody int id) {
+        return greetingService.getGreetingById(id);
+    }
+
+    @GetMapping(value = "/greetings")
+    public List<Greeting> greetings() {
+        return greetingService.greetings();
+    }
+
+    @PutMapping(value = "/greeting/{id}")
+    public Greeting updateGreeting(@PathVariable int id, @RequestBody GreetingDTO greetingDTO) {
+        return greetingService.updateGreeting(id, greetingDTO);
+    }
+
+    @DeleteMapping(value = "/greeting")
+    public String deleteGreeting(@RequestParam int id) {
+        return greetingService.deleteGreeting(id);
+    }
+
 }
